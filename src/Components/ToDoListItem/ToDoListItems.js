@@ -4,48 +4,27 @@ import './ToDoListItem.css'
 
 class ToDoListItems extends React.Component {
 
-  state = {
-    done: false,
-    important: false
-  }
-
-  onLabelClick = () => {
-    this.setState((state) => {
-      return {
-        done: !state.done
-      }
-    })
-  }
-  onImportantClick = () => {
-    this.setState(({important}) => {
-        return {
-          important: !important
-        }
-      }
-    )
-  }
-
 
   render() {
-    const {title, onDelete} = this.props
+    const {title, important, done, onDelete, onLabelClick, onImportantClick} = this.props
 
     let classNames = 'todo-list-item'
-    if(this.state.done){
+    if(done){
       classNames += ` done`
     }
 
-    if(this.state.important){
+    if(important){
       classNames += ' important'
     }
 
     return (
       <div className="row justify-content-sm-between align-items-center">
         <span className={classNames}
-        onClick={this.onLabelClick}
+        onClick={onLabelClick}
         >{title}</span>
         <div>
           <button className="btn btn-success bg-white" type="submit"
-          onClick={() => this.onImportantClick()}
+          onClick={onImportantClick}
           ><i className="fas fa-exclamation text-success" /></button>
           <button className="btn btn-danger bg-white ml-1" type="submit"
           onClick={onDelete}

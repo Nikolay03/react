@@ -4,24 +4,72 @@ import ToDoList from './Components/ToDoList/ToDoList';
 import SearchPanel from './Components/SearchPanel/SearchPanel';
 import AppHeader from './Components/AppHeader/AppHeader';
 import FilterButton from './Components/FilterButton/FilterButton'
+import AddItem from "./Components/AddItem/AddItem";
 
 
 class App extends React.Component{
+
+  maxId = 100
   state = {
     toDoData:[
       {
         title:'Vue',
-        id: 1
+        id: 1,
+        important: false,
+        done: false
       },
       {
         title:'React',
-        id: 2
+        id: 2,
+        important: true,
+        done: false
       },
       {
         title:'Angular',
-        id: 3
+        id: 3,
+        important: false,
+        done: false
       }
     ]
+  }
+
+  onLabelClick = (id) => {
+    this.setState(({toDoData}) => {
+      const idx = toDoData.findIndex((el) => el.id === id)
+
+      const oldItem = toDoData[idx]
+      const newItem = {...oldItem, done: !oldItem.done}
+
+      const before = toDoData.slice(0, idx)
+      const after = toDoData.slice(idx + 1)
+      const neArray = [...before, newItem, ...after]
+      return {
+        toDoData: neArray
+      }
+    })
+  }
+  onImportantClick = (id) => {
+    this.setState(({toDoData}) => {
+      const idx = toDoData.findIndex((el) => el.id === id)
+
+      const oldItem = toDoData[idx]
+      const newItem = {...oldItem, important: !oldItem.important}
+
+      const newArray = [
+        ...toDoData.slice(0, idx),
+        newItem,
+        ...toDoData.slice(idx + 1)
+      ]
+        return {
+        toDoData: newArray
+        }
+      }
+    )
+  }
+
+  clicker = {
+    onLabelClick: this.onLabelClick,
+    onImportantClick: this.onImportantClick
   }
 
   onDeleteHandler = (id) => {
@@ -36,6 +84,25 @@ class App extends React.Component{
     }
   })
   }
+  onAddItem = (text) => {
+    const newItem = {
+      title: text,
+      important: true,
+      done: false,
+      id: this.maxId ++
+    }
+
+    this.setState(({ toDoData }) => {
+      const newArray = [
+        ...toDoData,
+        newItem
+      ]
+
+      return {
+        toDoData: newArray
+      }
+    })
+  }
 
   render(){
     return (
@@ -47,8 +114,11 @@ class App extends React.Component{
               <SearchPanel />
               <FilterButton />
             </div>
-            <ToDoList data={this.state.toDoData}
-                      onDelete={this.onDeleteHandler}/>
+            <ToDoList
+              data={this.state.toDoData}
+              clicker={this.clicker}
+              onDelete={this.onDeleteHandler}/>
+              <AddItem onAddItem={this.onAddItem}/>
           </div>
         </div>
       </div>
