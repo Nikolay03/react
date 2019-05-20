@@ -1,6 +1,5 @@
 .AddBlock{
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 20px;
+
+}.AddBlock button{
+    width: 252px
 }

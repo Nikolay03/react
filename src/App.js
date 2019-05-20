@@ -30,7 +30,9 @@ class App extends React.Component{
         important: false,
         done: false
       }
-    ]
+    ],
+    term: '',
+    filter: 'done'
   }
 
   onLabelClick = (id) => {
@@ -87,7 +89,7 @@ class App extends React.Component{
   onAddItem = (text) => {
     const newItem = {
       title: text,
-      important: true,
+      important: false,
       done: false,
       id: this.maxId ++
     }
@@ -103,19 +105,48 @@ class App extends React.Component{
       }
     })
   }
+  search = (items, term) => {
+    if(term.length === 0) {
+      return items
+    }
+    return items.filter((item) => {
+      return item.title.toLowerCase().indexOf(term.toLowerCase()) > -1;
+
+    })
+  }
+
+  onSearchChange = (term) => {
+    this.setState({ term })
+  }
+
+  filter = (items, filter) => {
+    switch (filter){
+      case 'all':
+        return items
+      case 'active':
+        return items.filter((item) => !item.done)
+      case 'done':
+        return items.filter((item) => item.done)
+      default:
+        return items
+    }
+
+  };
 
   render(){
+    const visibleItems = this.filter(this.search(this.state.toDoData, this.state.term), this.state.filter)
     return (
       <div className="App container-fluid">
         <div className="row justify-content-sm-center align-items-sm-center">
           <div className="col-sm-6">
             <AppHeader />
             <div className="row px-3">
-              <SearchPanel />
-              <FilterButton />
+              <SearchPanel
+                onSearchChange={this.onSearchChange}/>
+              <FilterButton filter={this.state.filter}/>
             </div>
             <ToDoList
-              data={this.state.toDoData}
+              data={visibleItems}
               clicker={this.clicker}
               onDelete={this.onDeleteHandler}/>
               <AddItem onAddItem={this.onAddItem}/>
