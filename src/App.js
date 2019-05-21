@@ -32,7 +32,7 @@ class App extends React.Component{
       }
     ],
     term: '',
-    filter: 'done'
+    filter: ''
   }
 
   onLabelClick = (id) => {
@@ -118,6 +118,9 @@ class App extends React.Component{
   onSearchChange = (term) => {
     this.setState({ term })
   }
+  onFilterChange = (filter) => {
+    this.setState({ filter })
+  }
 
   filter = (items, filter) => {
     switch (filter){
@@ -143,7 +146,10 @@ class App extends React.Component{
             <div className="row px-3">
               <SearchPanel
                 onSearchChange={this.onSearchChange}/>
-              <FilterButton filter={this.state.filter}/>
+              <FilterButton
+                filter={this.state.filter}
+                onFilterChange={this.onFilterChange}
+              />
             </div>
             <ToDoList
               data={visibleItems}

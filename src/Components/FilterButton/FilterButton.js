@@ -8,12 +8,14 @@ class FilterButton extends React.Component{
   ]
 
   render() {
-    const {filter} = this.props
+    const {filter, onFilterChange} = this.props
     const buttons = this.buttons.map((item) => {
       const isActive = filter === item.name
       const clazz = isActive ? 'btn-info' : 'btn-outline-secondary'
       return (
-        <button key={item.name} type="button" className={`btn ${clazz}`}>{item.label}</button>
+        <button key={item.name} type="button" className={`btn ${clazz}`}
+        onClick={() => {onFilterChange(item.name)}}
+        >{item.label}</button>
       )
     })
     return (
